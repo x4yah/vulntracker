@@ -1,0 +1,26 @@
+<h2>Activar TOTP</h2>
+<p>Escanea este código QR con tu app TOTP:</p>
+<img src="{{ qr }}" alt="QR TOTP" />
+
+<!-- Botón para mostrar el secret -->
+<button type="button" onclick="document.getElementById('secret-modal').style.display='block'">
+  ¿No puedes escanear? Ver clave secreta
+</button>
+
+<!-- Modal simple -->
+<div id="secret-modal" style="display:none; margin-top:20px;">
+  <p><strong>Clave secreta:</strong> <code>{{ secret }}</code></p>
+  <p>Ingresa esta clave manualmente en tu app TOTP si no puedes escanear el código QR.</p>
+  <button onclick="document.getElementById('secret-modal').style.display='none'">Cerrar</button>
+</div>
+
+<form method="post">
+  {% csrf_token %}
+  <label for="token">Código TOTP:</label>
+  <input type="text" name="token" required />
+  <button type="submit">Confirmar</button>
+</form>
+
+{% if error %}
+  <p style="color:red;">{{ error }}</p>
+{% endif %}

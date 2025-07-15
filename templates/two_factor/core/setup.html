@@ -1,0 +1,13 @@
+{% load two_factor_tags %}
+{% load crispy_forms_tags %}
+
+<h2>Activar verificación en dos pasos</h2>
+<p>Escanea el siguiente QR con tu app TOTP</p>
+<img src="{{ device.config_url|otp_qrcode }}" alt="QR TOTP" />
+
+<form method="post">
+  {% csrf_token %}
+  {{ wizard.management_form }}
+  {{ wizard.form|crispy }}
+  <button type="submit">Activar</button>
+</form>

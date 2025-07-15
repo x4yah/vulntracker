@@ -1,0 +1,10 @@
+{% load crispy_forms_tags %}
+{% load two_factor_tags %}
+
+<h2>Acceso seguro</h2>
+<form method="post">
+  {% csrf_token %}
+  {{ wizard.management_form }}
+  {{ wizard.form|crispy }}
+  <button type="submit">Ingresar</button>
+</form>

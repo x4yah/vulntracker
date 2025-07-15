@@ -1,0 +1,18 @@
+{# templates/core/user_register.html #}
+
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Registrar Usuario</title>
+</head>
+<body>
+  <h1>Registrar Usuario</h1>
+  <form method="POST">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <button type="submit">Registrar</button>
+  </form>
+</body>
+</html>
