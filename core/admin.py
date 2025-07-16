@@ -1,12 +1,12 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from .models import User, Role
-from .forms import UserCreationForm
+from .forms import RegisterForm
 
 
 # Register your models here.
 class UserAdmin(BaseUserAdmin):
-    add_form = UserCreationForm
+    add_form = RegisterForm
     model = User
     list_display = ("email", "first_name", "last_name", "job_title", "role", "is_staff")
     list_filter = ("role", "is_staff")

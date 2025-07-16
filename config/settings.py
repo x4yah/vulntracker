@@ -57,6 +57,10 @@ INSTALLED_APPS = [
     "tracking",
 ]
 
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -100,7 +104,7 @@ DATABASES = {
 # ⏳ Autenticación
 AUTH_USER_MODEL = "core.User"
 
-LOGIN_URL = "login"
+LOGIN_URL = "/login"
 LOGIN_REDIRECT_URL = "/dashboard/"
 TEMPLATES[0]["DIRS"] = [BASE_DIR / "templates"]
 
@@ -116,9 +120,6 @@ MESSAGE_TAGS = {
     messages.ERROR: "danger",
 }
 
-# 🧼 Formularios con crispy
-CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
-CRISPY_TEMPLATE_PACK = "bootstrap5"
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 

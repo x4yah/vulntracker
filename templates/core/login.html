@@ -1,12 +1,30 @@
-<!DOCTYPE html>
-<html lang="es">
-<head><meta charset="UTF-8"><title>Login</title></head>
-<body>
-  <h2>Iniciar sesión</h2>
-  <form method="POST">
+{% extends "../auth_base.html" %}
+
+{% block title %}Iniciar Sesión{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2 class="text-center mb-4">🔐Iniciar sesión</h2>
+
+  <form method="post" novalidate>
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Entrar</button>
+    {% for field in form %}
+      <div class="form-group mb-3">
+        {{ field.label_tag }}
+        {{ field }}
+        {% if field.errors %}
+          <div class="text-danger">{{ field.errors|striptags }}</div>
+        {% endif %}
+      </div>
+    {% endfor %}
+
+    {% if form.non_field_errors %}
+      <div class="text-danger mb-3">{{ form.non_field_errors|striptags }}</div>
+    {% endif %}
+
+    <button type="submit" class="btn btn-primary w-100">Ingresar</button>
   </form>
-</body>
-</html>
+  <p class="mt-4 text-center text-muted">
+  ¿No tienes cuenta? <a href="{% url 'register' %}" class="link-primary">Regístrate aquí</a></p>
+</div>
+{% endblock %}

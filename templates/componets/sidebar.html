@@ -1,0 +1,14 @@
+<div class="sidebar position-fixed">
+  <h4 class="text-white mb-4">vulnTracker</h4>
+  <a href="{% url 'dashboard' %}">🏠 Dashboard</a>
+  <a href="{% url 'client_list' %}">👥 Clientes</a>
+  <a href="{% url 'project_list' %}">📂 Proyectos</a>
+  {% if user.is_staff or user.is_superuser %}
+    <a href="{% url 'vulnerabilities_list' %}">🛡️ Vulnerabilidades</a>
+    <a href="/admin/">🔧 Admin</a>
+  {% endif %}
+  <form method="post" action="{% url 'logout' %}">
+    {% csrf_token %}
+    <button class="btn btn-outline-light btn-sm mt-4" type="submit">Cerrar sesión</button>
+  </form>
+</div>

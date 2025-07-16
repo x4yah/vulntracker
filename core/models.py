@@ -51,6 +51,14 @@ class Role(models.Model):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+    username = models.CharField(
+        max_length=50,
+        unique=True,
+        blank=False,
+        null=False,
+        help_text="Nombre de usuario",
+    )
+
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     email = models.EmailField(unique=True)
@@ -60,8 +68,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 
-    USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["first_name", "last_name", "role"]
+    USERNAME_FIELD = "username"
+    REQUIRED_FIELDS = ["email", "first_name", "last_name", "role"]
 
     objects = CustomUserManager()
 

@@ -1,26 +1,64 @@
 from django import forms
 from django.contrib.auth import authenticate
-from django.contrib.auth.forms import ReadOnlyPasswordHashField
-from .models import User, Role
+from .models import User
 
 
-class UserCreationForm(forms.ModelForm):
-    role = forms.ModelChoiceField(queryset=Role.objects.all())
-    password1 = forms.CharField(label="Contraseña", widget=forms.PasswordInput)
-    password2 = forms.CharField(
-        label="Confirmar contraseña", widget=forms.PasswordInput
+class RegisterForm(forms.ModelForm):
+    username = forms.CharField(
+        label="Usuario", 
+        max_length=150, 
+        widget=forms.TextInput(attrs={
+            "placeholder": "Usuario",
+            "class": "form-control"
+        })
     )
+    email = forms.EmailField(
+        label="Email", 
+        max_length=150, 
+        widget=forms.TextInput(attrs={
+            "placeholder": "Email",
+            "class": "form-control"
+        })
+    )
+    first_name = forms.CharField(
+        label="Nombre", 
+        max_length=30, 
+        widget=forms.TextInput(attrs={
+            "placeholder": "Nombre",
+            "class": "form-control"
+        })
+    )
+    last_name = forms.CharField(
+        label="Apellido", 
+        max_length=30, 
+        widget=forms.TextInput(attrs={
+            "placeholder": "Apellido",
+            "class": "form-control"
+        })
+    )
+    password1 = forms.CharField(
+        label="Contraseña",
+        widget=forms.PasswordInput(attrs={
+            "placeholder": "Contraseña",
+            "class": "form-control"
+        }))
+    password2 = forms.CharField(
+        label="Confirme su contraseña",
+        widget=forms.PasswordInput(attrs={
+            "placeholder": "Confirmar contraseña",
+            "class": "form-control"
+        }))
 
     class Meta:
         model = User
-        fields = [
-            "first_name",
-            "last_name",
-            "email",
-            "job_title",
-            "role",
-        ]
+        fields = ["username", "first_name","last_name","email", "password1", "password2"]  # Agrega campos según tu modelo
 
+    def clean_email(self):
+        email = self.cleaned_data["email"]
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError("Este correo ya está en uso.")
+        return email
+    
     def clean_password2(self):
         pw1 = self.cleaned_data.get("password1")
         pw2 = self.cleaned_data.get("password2")
@@ -36,16 +74,31 @@ class UserCreationForm(forms.ModelForm):
         return user
 
 
-class login_form(forms.Form):
-    email = forms.EmailField()
-    password = forms.CharField(widget=forms.PasswordInput)
+class LoginForm(forms.Form):
+    username = forms.CharField(
+        label="Usuario", 
+        max_length=150, 
+        widget=forms.TextInput(attrs={
+            "placeholder": "Usuario",
+            "class": "form-control"
+        })
+    )
+    password = forms.CharField(
+        label="Contraseña", 
+        widget=forms.PasswordInput(attrs={
+            "placeholder": "Contraseña",
+            "class": "form-control"
+        })    )
 
     def clean(self):
-        email = self.cleaned_data.get("email")
-        password = self.cleaned_data.get("password")
-        user = authenticate(email=email, password=password)
+        cleaned_data = super().clean()
+        username = cleaned_data.get("username")
+        password = cleaned_data.get("password")
 
-        if not user:
-            raise forms.ValidationError("Credenciales inválidas.")
-        self.cleaned_data["user"] = user
-        return self.cleaned_data
+        if username and password:
+            user = authenticate(username=username, password=password)
+            if not user:
+                raise forms.ValidationError("Credenciales inválidas.")
+            cleaned_data["user"] = user
+        return cleaned_data
+

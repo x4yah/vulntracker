@@ -1,18 +1,36 @@
 {# templates/core/user_register.html #}
 
+{% extends "auth_base.html" %}
 {% load crispy_forms_tags %}
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <title>Registrar Usuario</title>
-</head>
-<body>
-  <h1>Registrar Usuario</h1>
-  <form method="POST">
+{% block title %}Registro | vulnTracker{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+<h4 class="text-center mb-4">📝 Crear cuenta</h4>
+
+  <form method="post">
     {% csrf_token %}
-    {{ form|crispy }}
-    <button type="submit">Registrar</button>
-  </form>
-</body>
-</html>
+    {% for field in form %}
+      <div class="form-group mb-3">
+        {{ field.label_tag }}
+        {{ field }}
+        {% if field.errors %}
+          <div class="text-danger">{{ field.errors|striptags }}</div>
+        {% endif %}
+      </div>
+    {% endfor %}
+
+    {% if form.non_field_errors %}
+      <div class="text-danger mb-3">{{ form.non_field_errors|striptags }}</div>
+    {% endif %}
+
+  <button type="submit" class="btn btn-success w-100 mt-3">Registrarse</button>
+</form>
+
+<p class="mt-4 text-center text-muted">
+  ¿Ya tienes cuenta? <a href="{% url 'login' %}" class="link-primary">Inicia sesión</a>
+</p>
+</div>
+{% endblock %}
+
+

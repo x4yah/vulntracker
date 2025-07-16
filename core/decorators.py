@@ -1,17 +1,9 @@
-from django_otp.plugins.otp_totp.models import TOTPDevice
 from django.shortcuts import redirect
-from functools import wraps
-
+from django_otp.plugins.otp_totp.models import TOTPDevice
 
 def require_totp_confirmed(view_func):
-    @wraps(view_func)
-    def _wrapped_view(request, *args, **kwargs):
-        if request.user.is_authenticated:
-            confirmed = TOTPDevice.objects.filter(
-                user=request.user, confirmed=True
-            ).exists()
-            if not confirmed:
-                return redirect("setup_totp_manual")
+    def wrapped_view(request, *args, **kwargs):
+        if not TOTPDevice.objects.filter(user=request.user, confirmed=True).exists():
+            return redirect("setup_totp")
         return view_func(request, *args, **kwargs)
-
-    return _wrapped_view
+    return wrapped_view

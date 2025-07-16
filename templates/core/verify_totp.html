@@ -1,0 +1,21 @@
+{% extends "../auth_base.html" %}
+
+{% block title %}Verificación 2FA{% endblock %}
+
+{% block content %}
+<h2>Verificación en dos pasos</h2>
+
+{% if error %}
+    <div class="error">{{ error }}</div>
+{% endif %}
+
+<form method="post">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="token">Código de autenticación</label>
+        <input type="text" name="token" id="token" required placeholder="Ingresa el código TOTP" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-success">Verificar</button>
+</form>
+{% endblock %}
