@@ -1,0 +1,13 @@
+{% extends "../base.html" %}
+{% block content %}
+<div class="alert alert-warning">
+  <h4>¿Estás seguro que deseas eliminar <strong>{{ project.name }}</strong>?</h4>
+  <p>Esta acción no se puede deshacer. Se eliminará el alias <strong>{{ project.code_name }}</strong> y sus asociaciones.</p>
+</div>
+
+<form method="POST">
+  {% csrf_token %}
+  <a href="{% url 'projects_overview' %}" class="btn btn-secondary">Cancelar</a>
+  <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+</form>
+{% endblock %}

@@ -17,11 +17,17 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, include
-from two_factor.urls import urlpatterns as tf_urls
-
+from django.conf.urls.static import static
+from django.conf import settings
+from core.views import tinymce_image_upload
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("core.urls")),
-    path("", include(tf_urls)),
-]
+    path("customers/", include("customers.urls")),
+    path("projects/", include("projects.urls")),
+    path("vulnerabilities/", include("vulnerabilities.urls")),
+    path("tinymce/upload/", tinymce_image_upload, name="tinymce_upload"),
+    path("tinymce/", include("tinymce.urls")),
+    path("select2/", include("django_select2.urls")),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

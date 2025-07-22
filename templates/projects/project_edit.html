@@ -1,0 +1,84 @@
+{% extends "../base.html" %}
+{% load static %}
+{% block title %}Nuevo Proyecto | vulnTracker{% endblock %}
+{% block content %}
+{{ form.media }}
+<div class="container">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">➕ Nuevo Proyecto</h2>
+    <a href="{% url 'projects_overview' %}" class="btn btn-outline-secondary">← Volver</a>
+  </div>
+
+  <form method="post" novalidate>
+    {% csrf_token %}
+    <div class="row g-4">
+
+      <div class="col-md-6">
+        <label for="id_name" class="form-label">Nombre del proyecto</label>
+        {{ form.name }}
+      </div>
+
+      <div class="col-md-6">
+        <label for="id_code_name" class="form-label">Alias técnico</label>
+        {{ form.code_name }}
+        <div class="form-text">  Alias sugerido: <strong>{{ form.code_name.value }}</strong>. Puedes editarlo o dejarlo como está.</div>
+      </div>
+
+      <div class="col-md-6">
+        <label for="id_client" class="form-label">Cliente</label>
+        {{ form.client }}
+      </div>
+      <div class="row mb-4">
+  <div class="col-md-6">
+    <label for="id_leader" class="form-label">Líder técnico</label>
+    {{ form.leader }}
+  </div>
+  <div class="col-md-6">
+    <label for="id_specialist" class="form-label">Colaboradores asignados</label>
+    {{ form.specialist }}
+    <div class="form-text">Selecciona uno o más especialistas que apoyarán el proyecto.</div>
+  </div>
+</div>
+      <div class="col-md-6">
+        <label for="id_start_date" class="form-label">Fecha de inicio</label>
+        {{ form.start_date }}
+      </div>
+
+      <div class="col-md-6">
+        <label for="id_end_date" class="form-label">Fecha de cierre (opcional)</label>
+        {{ form.end_date }}
+      </div>
+      <div class="col-6">
+        <label for="id_scope" class="form-label">Alcance del proyecto</label>
+        <div class="form-text">Puedes redactar libremente el alcance con formato: lista de activos, metodologías, etc.</div>
+        {{ form.scope }}
+      </div>
+      <div class="col-6">
+        <label for="id_description" class="form-label">Descripción general</label>
+        <div class="form-text">Descripcion general del proyecto solo para uso interno</div>        
+        {{ form.description }}
+      </div>
+
+      <div class="col-md-4">
+        <label for="id_status" class="form-label">Estado</label>
+        {{ form.status }}
+      </div>
+
+
+      <div class="col-12 mt-4 text-end">
+        <button type="submit" class="btn btn-success px-4">
+          💾 Guardar proyecto
+        </button>
+      </div>
+{{ form.errors }}
+    </div>
+  </form>
+</div>
+<script>
+  $("#id_specialist").select2({
+    placeholder: "Selecciona especialistas",
+    allowClear: true,
+    width: '100%'
+  });
+</script>
+{% endblock %}

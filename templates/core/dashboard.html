@@ -1,27 +1,12 @@
+{% extends "../base.html" %}
 {% load totp_filters %}
 
+{% block title %}Dashboard | vulnTracker{% endblock %}
+
+
+{% block content %}
+
 <h1>Bienvenido, {{ user.first_name }} {{ user.last_name }}</h1>
-<p>Rol: {{ role }}</p>
-
 <hr>
 
-<h2>📁 Seguimiento</h2>
-<ul>
-  <li><a href="#">Proyectos</a></li>
-  <li><a href="#">Clientes</a></li>
-</ul>
-
-{% if user.is_staff or user.is_superuser %}
-  <h2>🛡️ Administración</h2>
-  <ul>
-    <li><a href="#">Vulnerabilidades</a></li>
-    <li><a href="/admin/">Panel Admin</a></li>
-  </ul>
-{% endif %}
-
-<hr>
-
-<form method="post" action="{% url 'logout' %}">
-  {% csrf_token %}
-  <button type="submit">Cerrar sesión</button>
-</form>
+{%endblock%}

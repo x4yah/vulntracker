@@ -1,0 +1,390 @@
+{% extends "../base.html" %}
+{% load static %}
+{% block content %}
+{{ form.media }}
+<link rel="stylesheet" href="{% static 'css/cvss3.css' %}">
+<div class="container mt-4">
+  <h2 class="mb-4">Crear Vulnerabilidad</h2>
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="row g-3">
+
+      <!-- Título -->
+      <div class="col-md-12">
+        <label for="id_title" class="form-label">Título</label>
+        {{ form.title }}
+      </div>
+
+      <!-- Categoría y Tipo -->
+      <div class="col-md-6">
+        <label for="id_category" class="form-label">Categoría</label>
+        {{ form.category }}
+      </div>
+      <div class="col-md-6">
+        <label for="id_vuln_type" class="form-label">Tipo</label>
+        {{ form.vuln_type }}
+      </div>
+
+      <!-- Descripción -->
+      <div class="col-md-12">
+        <label for="id_description" class="block font-bold text-sm text-gray-700">Descripción</label>
+  {{ form.description }}
+      </div>
+<div class="card shadow-sm mb-4">
+  <div class="card-header bg-dark text-white">
+    <h5 class="mb-0">Calcualdora CVSS 3.1</h5>
+  </div>
+  <div class="card-body cvss-calculator">
+    <p class="text-muted mb-3">Selecciona los valores técnicos de la vulnerabilidad para calcular su score y severidad.</p>
+
+    <div class="row g-3">
+
+      <!-- AV, AC, PR, UI -->
+      <div class="col-md-3">
+        <label>Attack Vector (AV)</label>
+        <select id="cvss_av" class="form-select">
+          <option value="N">Network</option>
+          <option value="A">Adjacent</option>
+          <option value="L">Local</option>
+          <option value="P">Physical</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label>Attack Complexity (AC)</label>
+        <select id="cvss_ac" class="form-select">
+          <option value="L">Low</option>
+          <option value="H">High</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label>Privileges Required (PR)</label>
+        <select id="cvss_pr" class="form-select">
+          <option value="N">None</option>
+          <option value="L">Low</option>
+          <option value="H">High</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label>User Interaction (UI)</label>
+        <select id="cvss_ui" class="form-select">
+          <option value="N">None</option>
+          <option value="R">Required</option>
+        </select>
+      </div>
+
+      <!-- S, C, I, A -->
+      <div class="col-md-3">
+        <label>Scope (S)</label>
+        <select id="cvss_s" class="form-select">
+          <option value="U">Unchanged</option>
+          <option value="C">Changed</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label>Confidentiality (C)</label>
+        <select id="cvss_c" class="form-select">
+          <option value="N">None</option>
+          <option value="L">Low</option>
+          <option value="H">High</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label>Integrity (I)</label>
+        <select id="cvss_i" class="form-select">
+          <option value="N">None</option>
+          <option value="L">Low</option>
+          <option value="H">High</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label>Availability (A)</label>
+        <select id="cvss_a" class="form-select">
+          <option value="N">None</option>
+          <option value="L">Low</option>
+          <option value="H">High</option>
+        </select>
+      </div>
+
+    </div>
+
+    <hr class="mt-4">
+
+    <div class="text-center">
+      <p><strong>Vector:</strong> <code id="cvss_vector">CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N</code></p>
+      <p><strong>Score:</strong> <span id="cvss_score" class="fw-bold text-danger">—</span> 
+      <span id="cvss_severity" class="badge bg-secondary ms-2">—</span></p>
+    </div>
+
+    <!-- Hidden fields for submission -->
+    <input type="hidden" name="cvss_31_vector" id="cvss_vector_input">
+    <input type="hidden" name="cvss_31_score" id="cvss_score_input">
+    <input type="hidden" name="cvss_31_severity" id="cvss_severity_input">
+
+  </div>
+</div>
+
+<div class="card shadow-sm mb-4">
+  <div class="card-header bg-dark text-white">
+    <h5 class="mb-0">Calcualdora CVSS 4.0</h5>
+  </div>
+  <div class="card-body cvss-calculator-4">
+    <p class="text-muted mb-3">Selecciona los valores base de la vulnerabilidad para calcular su score y severidad.</p>
+
+    <div class="row g-3">
+      <div class="col-md-3"><label>AV</label><select id="cvss4_av" class="form-select">
+        <option value="N">Network</option><option value="A">Adjacent</option><option value="L">Local</option><option value="P">Physical</option>
+      </select></div>
+      <div class="col-md-3"><label>AC</label><select id="cvss4_ac" class="form-select">
+        <option value="L">Low</option><option value="H">High</option>
+      </select></div>
+      <div class="col-md-3"><label>AT</label><select id="cvss4_at" class="form-select">
+        <option value="N">None</option><option value="P">Present</option>
+      </select></div>
+      <div class="col-md-3"><label>PR</label><select id="cvss4_pr" class="form-select">
+        <option value="N">None</option><option value="L">Low</option><option value="H">High</option>
+      </select></div>
+      <div class="col-md-3"><label>UI</label><select id="cvss4_ui" class="form-select">
+        <option value="N">None</option><option value="P">Passive</option><option value="A">Active</option>
+      </select></div>
+      <div class="col-md-3"><label>VC</label><select id="cvss4_vc" class="form-select">
+        <option value="N">None</option><option value="L">Low</option><option value="H">High</option>
+      </select></div>
+      <div class="col-md-3"><label>VI</label><select id="cvss4_vi" class="form-select">
+        <option value="N">None</option><option value="L">Low</option><option value="H">High</option>
+      </select></div>
+      <div class="col-md-3"><label>VA</label><select id="cvss4_va" class="form-select">
+        <option value="N">None</option><option value="L">Low</option><option value="H">High</option>
+      </select></div>
+      <div class="col-md-3"><label>SC</label><select id="cvss4_sc" class="form-select">
+        <option value="N">None</option><option value="L">Low</option><option value="H">High</option>
+      </select></div>
+      <div class="col-md-3"><label>SI</label><select id="cvss4_si" class="form-select">
+        <option value="N">None</option><option value="L">Low</option><option value="H">High</option><option value="S">Substantial</option>
+      </select></div>
+      <div class="col-md-3"><label>SA</label><select id="cvss4_sa" class="form-select">
+        <option value="N">None</option><option value="L">Low</option><option value="H">High</option><option value="S">Substantial</option>
+      </select></div>
+      <div class="col-md-3"><label>E</label><select id="cvss4_e" class="form-select">
+        <option value="A">Attacked</option><option value="P">Proof-of-Concept</option><option value="U">Unreported</option>
+      </select></div>
+    </div>
+
+    <hr class="mt-4">
+
+    <div class="text-center">
+      <p><strong>Vector:</strong> <code id="cvss4_vector">CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N/E:A</code></p>
+      <p><strong>Score:</strong> <span id="cvss4_score" class="fw-bold text-danger">—</span> 
+      <span id="cvss4_severity" class="badge bg-secondary ms-2">—</span></p>
+    </div>
+
+    <input type="hidden" name="cvss_40_vector" id="cvss4_vector_input">
+    <input type="hidden" name="cvss_40_score" id="cvss4_score_input">
+    <input type="hidden" name="cvss_40_severity" id="cvss4_severity_input">
+  </div>
+</div>
+
+      <!-- Remediación -->
+      <div class="col-md-12">
+        <label for="id_remediation" class="form-label">Remediación</label>
+        {{ form.remediation }}
+      </div>
+
+      <!-- Complejidad y Prioridad -->
+      <div class="col-md-6">
+        <label for="id_remediation_complexity" class="form-label">Complejidad</label>
+        {{ form.remediation_complexity }}
+      </div>
+      <div class="col-md-6">
+        <label for="id_remediation_priority" class="form-label">Prioridad</label>
+        {{ form.remediation_priority }}
+      </div>
+
+      <!-- Impacto y Probabilidad -->
+      <div class="col-md-6">
+        <label for="id_impact" class="form-label">Impacto</label>
+        {{ form.impact }}
+      </div>
+      <div class="col-md-6">
+        <label for="id_likelihood" class="form-label">Probabilidad</label>
+        {{ form.likelihood }}
+      </div>
+
+      <!-- Rating -->
+      <div class="col-md-12">
+        <label for="id_risk_rating" class="form-label">Rating de Riesgo</label>
+        {{ form.risk_rating }}
+      </div>
+
+      <!-- Referencias -->
+      <div class="col-md-12">
+        <label for="id_references" class="form-label">Referencias</label>
+        {{ form.references }}
+      </div>
+{{ form.errors }}
+    </div>
+
+    <div class="mt-4">
+      <button type="submit" class="btn btn-primary">Guardar Vulnerabilidad</button>
+    </div>
+
+  </form>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const categorySelect = document.getElementById("id_category");
+    const typeSelect = document.getElementById("id_vuln_type");
+
+    categorySelect.addEventListener("change", function () {
+      const categoryId = this.value;
+      fetch(`/vulnerabilities/ajax/load-vuln-types/?category=${categoryId}`)
+        .then(response => response.json())
+        .then(data => {
+          typeSelect.innerHTML = "";
+          data.forEach(function (item) {
+            const option = document.createElement("option");
+            option.value = item.id;
+            option.textContent = `${item.code} - ${item.name}`;
+            typeSelect.appendChild(option);
+          });
+        });
+    });
+  });
+</script>
+
+<script src="{% static 'js/cvss3.js' %}"></script>
+<script src="{% static 'js/cvss4.js' %}"></script>
+<script>
+  // 🔧 Lee cada métrica desde su <select>
+  function getMetric(id) {
+    const el = document.getElementById(id);
+    return el ? el.value : '';
+  }
+
+  // 🧮 Crea el vector completo y lo calcula
+  function updateCVSS() {
+    const metrics = {
+      AV: getMetric('cvss_av'),
+      AC: getMetric('cvss_ac'),
+      PR: getMetric('cvss_pr'),
+      UI: getMetric('cvss_ui'),
+      S: getMetric('cvss_s'),
+      C: getMetric('cvss_c'),
+      I: getMetric('cvss_i'),
+      A: getMetric('cvss_a')
+    };
+
+    const vectorParts = Object.entries(metrics).map(([key, val]) => `${key}:${val}`);
+    const vectorString = `CVSS:3.1/${vectorParts.join('/')}`;
+
+    // 💡 Calcula usando la lib oficial CVSS31
+    if (typeof CVSS31 !== "undefined" && typeof CVSS31.calculateCVSSFromVector === "function") {
+      const result = CVSS31.calculateCVSSFromVector(vectorString);
+
+      if (result.success) {
+        const score = result.baseMetricScore;
+        const severity = result.baseSeverity;
+
+        // 🎯 Actualiza DOM
+        document.getElementById('cvss_vector').textContent = vectorString;
+        document.getElementById('cvss_score').textContent = score;
+        document.getElementById('cvss_severity').textContent = severity;
+        document.getElementById('cvss_score_input').value = score;
+        document.getElementById('cvss_vector_input').value = result.vectorString;
+        document.getElementById('cvss_severity_input').value = severity;
+
+
+        const badge = document.getElementById('cvss_severity');
+        badge.className = 'badge ms-2 bg-' + (
+          severity === 'Critical' ? 'danger' :
+          severity === 'High'     ? 'warning' :
+          severity === 'Medium'   ? 'primary' :
+          severity === 'Low'      ? 'success' : 'secondary'
+        );
+      } else {
+        console.warn('CVSS error:', result);
+        resetCVSSDisplay('Error');
+      }
+    } else {
+      console.error('CVSS31 lib not available');
+      resetCVSSDisplay('ND');
+    }
+  }
+
+  // 🧽 Limpia valores visuales en caso de error
+  function resetCVSSDisplay(label) {
+    document.getElementById('cvss_score').textContent = '—';
+    document.getElementById('cvss_severity').textContent = label;
+    document.getElementById('cvss_vector').textContent = 'No válido';
+    document.getElementById('cvss_score_input').value = '';
+    document.getElementById('cvss_vector_input').value = '';
+    document.getElementById('cvss_severity').className = 'badge bg-secondary ms-2';
+  }
+
+  // 🧼 Activa el cálculo en cada cambio
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll('.cvss-calculator select').forEach(select => {
+      select.addEventListener('change', updateCVSS);
+    });
+    updateCVSS(); // inicializa
+  });
+</script>
+
+<script>
+  function getMetric(id) {
+    const el = document.getElementById(id);
+    return el ? el.value : '';
+  }
+
+  function updateCVSS4() {
+    const metrics = {
+      AV: getMetric('cvss4_av'),
+      AC: getMetric('cvss4_ac'),
+      AT: getMetric('cvss4_at'),
+      PR: getMetric('cvss4_pr'),
+      UI: getMetric('cvss4_ui'),
+      VC: getMetric('cvss4_vc'),
+      VI: getMetric('cvss4_vi'),
+      VA: getMetric('cvss4_va'),
+      SC: getMetric('cvss4_sc'),
+      SI: getMetric('cvss4_si'),
+      SA: getMetric('cvss4_sa'),
+      E: getMetric('cvss4_e'),
+    };
+
+    const vector = `CVSS:4.0/${Object.entries(metrics).map(([k,v]) => `${k}:${v}`).join('/')}`;
+
+    try {
+      const vuln = new CVSS40(vector);
+      const score = vuln.score;
+      const severity = vuln.severity;
+
+      document.getElementById('cvss4_vector').textContent = vector;
+      document.getElementById('cvss4_vector_input').value = vector;
+      document.getElementById('cvss4_score').textContent = score;
+      document.getElementById('cvss4_score_input').value = score;
+      document.getElementById('cvss4_severity').textContent = severity;
+      document.getElementById('cvss4_severity_input').value = severity;
+      document.getElementById('cvss4_severity').className = 'badge ms-2 bg-' + (
+        severity === 'Critical' ? 'danger' :
+        severity === 'High' ? 'warning' :
+        severity === 'Medium' ? 'primary' :
+        severity === 'Low' ? 'success' : 'secondary'
+      );
+    } catch (err) {
+      console.error("Error CVSS v4.0:", err);
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll('.cvss-calculator-4 select').forEach(select => {
+      select.addEventListener('change', updateCVSS4);
+    });
+    updateCVSS4(); // inicializa
+  });
+</script>
+
+
+
+
+{% endblock %}

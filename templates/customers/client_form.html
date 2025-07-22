@@ -1,0 +1,75 @@
+{% extends "../base.html" %}
+{% block title %}{{ client.name|default:"Nueva empresa" }} | vulnTracker{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h2 class="mb-4">
+    {% if client %}
+      ✏️ Editar empresa
+    {% else %}
+      ➕ Nueva empresa
+    {% endif %}
+  </h2>
+
+  <form method="post" enctype="multipart/form-data" autocomplete="off" class="mb-4">
+    {% csrf_token %}
+    <div class="row">
+      <div class="col-md-8">
+        <div class="mb-3">
+          <label for="id_name" class="form-label">Nombre completo</label>
+          {{ form.name }}
+          {% if form.name.errors %}
+            <div class="text-danger small">{{ form.name.errors|join:", " }}</div>
+          {% endif %}
+        </div>
+
+        <div class="mb-3">
+          <label for="id_short_name" class="form-label">Alias corto</label>
+          {{ form.short_name }}
+          {% if form.short_name.errors %}
+            <div class="text-danger small">{{ form.short_name.errors|join:", " }}</div>
+          {% endif %}
+        </div>
+
+        <div class="mb-3">
+          <label for="id_industry" class="form-label">Industria</label>
+          {{ form.industry }}
+          {% if form.industry.errors %}
+            <div class="text-danger small">{{ form.industry.errors|join:", " }}</div>
+          {% endif %}
+        </div>
+
+        <div class="mb-3">
+          <label for="id_logo" class="form-label">Logo</label>
+          {{ form.logo }}
+          {% if form.logo.errors %}
+            <div class="text-danger small">{{ form.logo.errors|join:", " }}</div>
+          {% endif %}
+        </div>
+
+        {% if client %}
+          <p class="text-muted small">
+            Registrado el {{ client.created_at|date:"d M Y" }}
+          </p>
+        {% endif %}
+      </div>
+
+      <div class="col-md-4 text-center">
+        {% if client and client.logo %}
+          <p class="mb-2"><strong>Logo actual</strong></p>
+          <img src="{{ client.get_logo_url }}" alt="{{ client.name }}" class="img-fluid rounded shadow-sm" style="max-height: 100px;">
+        {% else %}
+          <p class="text-muted mt-4">Sin logo cargado.</p>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="mt-4">
+      <button type="submit" class="btn btn-primary">
+        {% if client %}Guardar cambios{% else %}Crear empresa{% endif %}
+      </button>
+      <a href="{% url 'clients_list' %}" class="btn btn-outline-secondary ms-2">Cancelar</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

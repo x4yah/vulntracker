@@ -1,0 +1,53 @@
+{% extends "../base.html" %}
+{% block title %}Detalles del cliente | vulnTracker{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="d-flex align-items-center mb-4">
+    {% if client.logo %}
+      <img src="{{ client.get_logo_url }}" alt="{{ client.name }}" class="me-3 rounded" style="max-height: 80px;">
+    {% endif %}
+    <div>
+      <h2 class="mb-0">{{ client.name }}</h2>
+      <small class="text-muted">Alias: {{ client.short_name }}</small> <br>
+      <small class="text-muted">Sector: {{ client.industry }}</small>
+    </div>
+  </div>
+
+  <hr>
+
+  <h4 class="mb-3">👥 Puntos de contacto</h4>
+
+<div class="row row-cols-1 row-cols-md-2 g-3">
+  {% for contact in contacts %}
+    <div class="col">
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title">{{ contact.first_name }} {{ contact.last_name }}</h5>
+          <p class="card-text">
+            <strong>Cargo:</strong> {{ contact.role }}<br>
+            <strong>Email:</strong> <a href="mailto:{{ contact.email }}">{{ contact.email }}</a><br>
+            {% if contact.phone %}<strong>Teléfono:</strong> {{ contact.phone }}{% endif %}
+          </p>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+      <p class="text-muted">Sin contactos registrados.</p>
+  {% endfor %}
+</div>
+<h4 class="mt-4">📦 Proyectos asociados</h4>
+<ul>
+  {% for project in client.project_set.all %}
+    <li><a href="{% url 'project_detail' project.pk %}">{{ project.code_name }}</a> — {{ project.status }}</li>
+  {% empty %}
+    <p class="text-muted">Sin proyectos registrados.</p>
+  {% endfor %}
+</ul>
+  <div class="mt-4 d-flex gap-3">
+    <a href="{% url 'clients_edit' client.pk %}" class="btn btn-outline-primary">✏️ Editar empresa</a>
+    <a href="{% url 'contacts_new' %}?client={{ client.pk }}" class="btn btn-outline-success">➕ Agregar contacto</a>
+    <a href="{% url 'clients_list' %}" class="btn btn-outline-secondary">← Volver al listado</a>
+  </div>
+</div>
+{% endblock %}

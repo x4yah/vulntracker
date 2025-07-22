@@ -1,0 +1,49 @@
+{% extends "../base.html" %}
+{% block title %}Mis Proyectos | vulnTracker{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">📦 Mis Proyectos</h2>
+    {% if user.is_staff %}
+      <a href="{% url 'projects_new' %}" class="btn btn-success">➕ Nuevo proyecto</a>
+    {% endif %}
+  </div>
+
+  {% if projects %}
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+      {% for project in projects %}
+        <div class="col">
+          <div class="card shadow-sm h-100">
+            <div class="card-body">
+              <h5 class="card-title">
+                {{ project.name }}
+                <span class="badge bg-dark float-end">{{ project.get_status_display }}</span>
+              </h5>
+              <p class="mb-1 text-muted">Alias técnico: <code>{{ project.code_name }}</code></p>
+              <p class="mb-1">Cliente: <strong>{{ project.client.short_name }}</strong></p>
+              <p class="mb-1">Responsable: <em>{{ project.specialist.get_full_name|default:"—" }}</em></p>
+              <p class="mb-2">Inicio: {{ project.start_date|date:"d M Y" }}</p>
+
+              {% if project.cvss_31_score %}
+                <span class="badge bg-{% if project.cvss_31_score >= 9 %}danger{% elif project.cvss_31_score >= 7 %}warning{% elif project.cvss_31_score >= 4 %}primary{% else %}success{% endif %}">
+                  CVSS: {{ project.cvss_31_score|floatformat:1 }} 
+                  ({{ project.cvss_31_severity|default:"—" }})
+                </span>
+              {% else %}
+                <span class="badge bg-secondary">Sin score CVSS</span>
+              {% endif %}
+            </div>
+            <div class="card-footer d-flex justify-content-between">
+              <a href="{% url 'projects_detail' project.pk %}" class="btn btn-sm btn-outline-primary">🔍 Ver detalles</a>
+              <a href="{% url 'followup_list' project.pk %}" class="btn btn-sm btn-outline-info">📄 Avances</a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="text-muted">No hay proyectos visibles aún.</p>
+  {% endif %}
+</div>
+{% endblock %}

@@ -12,4 +12,12 @@ dependencies = [
     "django-environ",
     "docxtpl",
     "django-otp>=1.6.1",
+    "django-ckeditor-5>=0.2.18",
+    "qrcode>=8.2",
+    "crispy-bootstrap5>=2025.6",
+    "pyyaml>=6.0.2",
+    "pypng>=0.20220715.0",
+    "ruff>=0.12.4",
 ]
+[tool.setuptools]
+packages = ["core", "vulnerabilities", "projects", "customers", "tracking", "reports", "config"]

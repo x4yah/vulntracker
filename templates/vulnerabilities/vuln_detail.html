@@ -1,0 +1,69 @@
+{% extends "../base.html" %}
+{% block content %}
+<div class="container mt-4">
+  <h2 class="mb-4">{{ vulnerability.title }}</h2>
+
+  <div class="card mb-4">
+    <div class="card-body">
+      <p><strong>Categoría:</strong> {{ vulnerability.category.name }}</p>
+      <p><strong>Tipo:</strong> {{ vulnerability.vuln_type.code }} - {{ vulnerability.vuln_type.name }}</p>
+      <p><strong>Marco de Referencia:</strong> {{ vulnerability.category.standard }}</p>
+    </div>
+  </div>
+
+  <!-- Descripción -->
+  <div class="card mb-4">
+    <div class="card-header"><strong>Descripción</strong></div>
+    <div class="card-body">
+      {{ vulnerability.description|safe }}
+    </div>
+  </div>
+
+  <!-- Remediación -->
+  <div class="card mb-4">
+    <div class="card-header"><strong>Remediación</strong></div>
+    <div class="card-body">
+      {{ vulnerability.remediation|safe }}
+      <p><strong>Complejidad:</strong> {{ vulnerability.get_remediation_complexity_display }}</p>
+      <p><strong>Prioridad:</strong> {{ vulnerability.get_remediation_priority_display }}</p>
+    </div>
+  </div>
+
+  <!-- CVSS -->
+  <div class="card mb-4">
+    <div class="card-header"><strong>CVSS</strong></div>
+    <div class="card-body">
+      <p><strong>CVSS 3.1 Vector:</strong> {{ vulnerability.cvss_31_vector }}</p>
+      <p><strong>Score:</strong> {{ vulnerability.cvss_31_score }}</p>
+      <p><strong>Severidad:</strong> {{ vulnerability.cvss_31_severity }}</p>
+      <hr>
+      <p><strong>CVSS 4.0 Vector:</strong> {{ vulnerability.cvss_40_vector }}</p>
+      <p><strong>Score:</strong> {{ vulnerability.cvss_40_score }}</p>
+      <p><strong>Severidad:</strong> {{ vulnerability.cvss_40_severity }}</p>
+    </div>
+  </div>
+
+  <!-- OWASP Risk Rating -->
+  <div class="card mb-4">
+    <div class="card-header"><strong>Clasificación de Riesgo OWASP</strong></div>
+    <div class="card-body">
+      <p><strong>Impacto:</strong> {{ vulnerability.get_impact_display }}</p>
+      <p><strong>Probabilidad:</strong> {{ vulnerability.get_likelihood_display }}</p>
+      <p><strong>Riesgo:</strong> {{ vulnerability.risk_rating|title }}</p>
+    </div>
+  </div>
+
+  <!-- Referencias -->
+  <div class="card mb-4">
+    <div class="card-header"><strong>Referencias</strong></div>
+    <div class="card-body">
+      <pre>{{ vulnerability.references }}</pre>
+    </div>
+  </div>
+
+  <!-- Meta -->
+  <div class="text-muted small">
+    Creado el {{ vulnerability.created_at|date:"d M Y" }}
+  </div>
+</div>
+{% endblock %}

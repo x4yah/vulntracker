@@ -1,0 +1,159 @@
+{% extends "../base.html" %}
+{% load static %}
+{% block content %}
+{{ form.media }}
+<div class="container mt-4">
+  <h2 class="mb-4">Crear Vulnerabilidad</h2>
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="row g-3">
+
+      <!-- Título -->
+      <div class="col-md-12">
+        <label for="id_title" class="form-label">Título</label>
+        {{ form.title }}
+      </div>
+
+      <!-- Categoría y Tipo -->
+      <div class="col-md-6">
+        <label for="id_category" class="form-label">Categoría</label>
+        {{ form.category }}
+      </div>
+      <div class="col-md-6">
+        <label for="id_vuln_type" class="form-label">Tipo</label>
+        {{ form.vuln_type }}
+      </div>
+
+      <!-- Descripción -->
+      <div class="col-md-12">
+        <label for="id_description" class="block font-bold text-sm text-gray-700">Descripción</label>
+  {{ form.description }}
+      </div>
+
+      <!-- CVSS 3.1 -->
+      <div class="col-md-4">
+        <label for="id_cvss_31_vector" class="form-label">CVSS 3.1 Vector</label>
+        {{ form.cvss_31_vector }}
+      </div>
+      <div class="col-md-4">
+        <label for="id_cvss_31_score" class="form-label">CVSS 3.1 Score</label>
+        {{ form.cvss_31_score }}
+      </div>
+      <div class="col-md-4">
+        <label for="id_cvss_31_severity" class="form-label">Severidad 3.1</label>
+        {{ form.cvss_31_severity }}
+      </div>
+
+      <!-- CVSS 4.0 -->
+      <div class="col-md-4">
+        <label for="id_cvss_40_vector" class="form-label">CVSS 4.0 Vector</label>
+        {{ form.cvss_40_vector }}
+      </div>
+      <div class="col-md-4">
+        <label for="id_cvss_40_score" class="form-label">CVSS 4.0 Score</label>
+        {{ form.cvss_40_score }}
+      </div>
+      <div class="col-md-4">
+        <label for="id_cvss_40_severity" class="form-label">Severidad 4.0</label>
+        {{ form.cvss_40_severity }}
+      </div>
+
+      <!-- Remediación -->
+      <div class="col-md-12">
+        <label for="id_remediation" class="form-label">Remediación</label>
+        {{ form.remediation }}
+      </div>
+
+      <!-- Complejidad y Prioridad -->
+      <div class="col-md-6">
+        <label for="id_remediation_complexity" class="form-label">Complejidad</label>
+        {{ form.remediation_complexity }}
+      </div>
+      <div class="col-md-6">
+        <label for="id_remediation_priority" class="form-label">Prioridad</label>
+        {{ form.remediation_priority }}
+      </div>
+
+      <!-- Impacto y Probabilidad -->
+      <div class="col-md-6">
+        <label for="id_impact" class="form-label">Impacto</label>
+        {{ form.impact }}
+      </div>
+      <div class="col-md-6">
+        <label for="id_likelihood" class="form-label">Probabilidad</label>
+        {{ form.likelihood }}
+      </div>
+
+      <!-- Rating -->
+      <div class="col-md-12">
+        <label for="id_risk_rating" class="form-label">Rating de Riesgo</label>
+        {{ form.risk_rating }}
+      </div>
+
+      <!-- Imagen de Prueba -->
+      <div class="col-md-12">
+        <label for="id_proof_image" class="form-label">Imagen de Evidencia</label>
+        {{ form.proof_image }}
+      </div>
+
+      <!-- Referencias -->
+      <div class="col-md-12">
+        <label for="id_references" class="form-label">Referencias</label>
+        {{ form.references }}
+      </div>
+
+      <!-- Ubicación -->
+      <div class="col-md-12">
+        <label for="id_location" class="form-label">Ubicación</label>
+        {{ form.location }}
+      </div>
+
+      <!-- Proyecto, Cliente, Estado -->
+      <div class="col-md-4">
+        <label for="id_project" class="form-label">Proyecto</label>
+        {{ form.project }}
+      </div>
+      <div class="col-md-4">
+        <label for="id_client" class="form-label">Cliente</label>
+        {{ form.client }}
+      </div>
+      <div class="col-md-4">
+        <label for="id_status" class="form-label">Estado</label>
+        {{ form.status }}
+      </div>
+
+    </div>
+
+    <div class="mt-4">
+      <button type="submit" class="btn btn-primary">Guardar Vulnerabilidad</button>
+    </div>
+  </form>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const categorySelect = document.getElementById("id_category");
+    const typeSelect = document.getElementById("id_vuln_type");
+
+    categorySelect.addEventListener("change", function () {
+      const categoryId = this.value;
+      fetch(`/vulnerabilities/ajax/load-vuln-types/?category=${categoryId}`)
+        .then(response => response.json())
+        .then(data => {
+          typeSelect.innerHTML = "";
+          data.forEach(function (item) {
+            const option = document.createElement("option");
+            option.value = item.id;
+            option.textContent = `${item.code} - ${item.name}`;
+            typeSelect.appendChild(option);
+          });
+        });
+    });
+  });
+</script>
+<script>
+  console.log("ClassicEditor:", typeof ClassicEditor !== "undefined" ? "Loaded" : "NOT loaded");
+</script>
+
+
+{% endblock %}

@@ -1,0 +1,23 @@
+{% load static %}
+<div class="ck-editor-container">
+  <textarea name="{{ widget.name }}"
+    {% for name, value in widget.attrs.items %}
+      {{ name }}="{{ value }}"
+    {% endfor %}
+  >{% if widget.value %}{{ widget.value }}{% endif %}</textarea>
+
+  <span class="word-count" id="{{script_id}}-word-count"></span>
+  {% if errors %}
+    {{ errors }}
+  {% endif %}
+</div>
+
+<input type="hidden"
+       id="{{script_id}}-ck-editor-5-upload-url"
+       data-upload-url="{{upload_url}}"
+       data-upload-file-types="{{upload_file_types}}"
+       data-csrf_cookie_name="{{ csrf_cookie_name }}" />
+
+<script id="{{script_id}}-config" type="application/json">
+  {{ config|safe }}
+</script>

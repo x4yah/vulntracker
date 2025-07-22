@@ -1,0 +1,59 @@
+{% extends "../base.html" %}
+{% block title %}Dashboard cliente | vulnTracker{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2 class="mb-3">📊 Panel de Seguridad - {{ request.user.client.short_name }}</h2>
+
+  <div class="row row-cols-1 row-cols-md-3 g-3">
+    {% for sev, count in severity_data.items %}
+      <div class="col">
+        <div class="card border-danger">
+          <div class="card-body text-center">
+            <h5 class="card-title">{{ sev }}</h5>
+            <p class="card-text display-6">{{ count }}</p>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  <div class="mt-5">
+    <canvas id="severityChart"></canvas>
+  </div>
+
+  <div class="mt-5">
+    <h4>🔎 Activos más comprometidos</h4>
+    <table class="table table-striped datatable">
+      <thead>
+        <tr><th>Activo</th><th>Vulnerabilidades</th></tr>
+      </thead>
+      <tbody>
+        {% for asset in top_assets %}
+          <tr><td>{{ asset.name }}</td><td>{{ asset.count }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const ctx = document.getElementById("severityChart").getContext("2d");
+  new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: {{ labels|safe }},
+      datasets: [{
+        label: "Vulnerabilidades por severidad",
+        data: {{ values|safe }},
+        backgroundColor: ["#dc3545", "#fd7e14", "#ffc107", "#198754"]
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } }
+    }
+  });
+</script>
+{% endblock %}

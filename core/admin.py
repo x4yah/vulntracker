@@ -8,7 +8,15 @@ from .forms import RegisterForm
 class UserAdmin(BaseUserAdmin):
     add_form = RegisterForm
     model = User
-    list_display = ("email", "first_name", "last_name", "job_title", "role", "is_staff")
+    list_display = (
+        "email",
+        "first_name",
+        "last_name",
+        "job_title",
+        "role",
+        "is_staff",
+        "client",
+    )
     list_filter = ("role", "is_staff")
     fieldsets = (
         (None, {"fields": ("email", "password")}),

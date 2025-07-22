@@ -1,0 +1,50 @@
+{% extends "../base.html" %}
+{% block title %}Empresas clientes | vulnTracker{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">🏢 Empresas registradas</h2>
+    <a href="{% url 'clients_new' %}" class="btn btn-success">➕ Nueva empresa</a>
+  </div>
+
+  {% if clients %}
+    <div class="table-responsive">
+      <table class="table table-striped table-bordered align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th>Logo</th>
+            <th>Nombre</th>
+            <th>Alias</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for client in clients %}
+          <tr>
+            <td>
+              {% if client.logo %}
+                <img src="{{ client.get_logo_url }}" alt="{{ client.name }}" style="max-height: 50px;" class="rounded">
+              {% else %}
+                <span class="text-muted">—</span>
+              {% endif %}
+            </td>
+            <td>{{ client.name }}</td>
+            <td>{{ client.short_name }}</td>
+            <td>
+              <div class="btn-group">
+                <a href="{% url 'clients_details' client.pk %}" class="btn btn-sm btn-outline-primary">🔍 Ver</a>
+                <a href="{% url 'clients_edit' client.pk %}" class="btn btn-sm btn-outline-warning">✏️ Editar</a>
+                <a href="{% url 'clients_delete' client.pk %}" class="btn btn-sm btn-outline-danger" onclick="return confirm('¿Estás seguro de eliminar esta empresa?');">🗑️ Eliminar</a>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="text-muted">No hay empresas registradas aún.</p>
+  {% endif %}
+</div>
+{% endblock %}

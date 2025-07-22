@@ -1,0 +1,81 @@
+{% extends "../base.html" %}
+{% block title %}{{ contact.first_name|default:"Nuevo contacto" }} | vulnTracker{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h2 class="mb-4">
+    {% if contact %}
+      ✏️ Editar contacto
+    {% else %}
+      ➕ Nuevo contacto
+    {% endif %}
+  </h2>
+
+  <form method="post" autocomplete="off" class="mb-4">
+    {% csrf_token %}
+
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label for="id_first_name" class="form-label">Nombre</label>
+        {{ form.first_name }}
+        {% if form.first_name.errors %}
+          <div class="text-danger small">{{ form.first_name.errors|join:", " }}</div>
+        {% endif %}
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <label for="id_last_name" class="form-label">Apellido</label>
+        {{ form.last_name }}
+        {% if form.last_name.errors %}
+          <div class="text-danger small">{{ form.last_name.errors|join:", " }}</div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="id_role" class="form-label">Cargo</label>
+      {{ form.role }}
+      {% if form.role.errors %}
+        <div class="text-danger small">{{ form.role.errors|join:", " }}</div>
+      {% endif %}
+    </div>
+
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label for="id_email" class="form-label">Email</label>
+        {{ form.email }}
+        {% if form.email.errors %}
+          <div class="text-danger small">{{ form.email.errors|join:", " }}</div>
+        {% endif %}
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <label for="id_phone" class="form-label">Teléfono</label>
+        {{ form.phone }}
+        {% if form.phone.errors %}
+          <div class="text-danger small">{{ form.phone.errors|join:", " }}</div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="id_client" class="form-label">Empresa asociada</label>
+      {{ form.client }}
+      {% if form.client.errors %}
+        <div class="text-danger small">{{ form.client.errors|join:", " }}</div>
+      {% endif %}
+    </div>
+
+    {% if contact %}
+      <p class="text-muted small">Registrado el {{ contact.created_at|date:"d M Y" }}</p>
+    {% endif %}
+
+    <div class="mt-4">
+      <button type="submit" class="btn btn-primary">
+        {% if contact %}Guardar cambios{% else %}Crear contacto{% endif %}
+      </button>
+      <a href="{% url 'contacts_list' %}" class="btn btn-outline-secondary ms-2">Cancelar</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

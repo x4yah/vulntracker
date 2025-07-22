@@ -7,6 +7,9 @@ from .forms import LoginForm, RegisterForm
 from django.contrib.auth.hashers import make_password
 from .decorators import require_totp_confirmed
 from .models import User
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+from django.core.files.storage import default_storage
 
 import qrcode
 from qrcode.image.pil import PilImage
@@ -59,7 +62,6 @@ def verify_totp_view(request):
     return render(request, "core/verify_totp.html", {"error": error})
 
 
-
 # Paso 3: Setup de TOTP (escaneo QR + confirmación)
 @login_required
 def setup_totp_view(request):
@@ -105,13 +107,54 @@ def setup_totp_view(request):
     )
 
 
-
-
 # Paso 4: Dashboard protegido
 @login_required
 @require_totp_confirmed
 def dashboard_view(request):
-    return render(request, "core/dashboard.html", {"user": request.user})
+    role_obj = request.user.role
+    role = role_obj.name.lower() if role_obj else "sin_rol"
+    sidebar = f"components/sidebar_{role}.html"
+
+    if role == "cliente":
+        # ⚠️ Datos dummy, conectar luego con queryset filtrado por request.user.client
+        severity_data = {
+            "Critical": 4,
+            "High": 5,
+            "Medium": 3,
+            "Low": 2,
+        }
+
+        # 🔧 Preparar datos para Chart.js
+        labels = list(severity_data.keys())
+        values = list(severity_data.values())
+
+        top_assets = [
+            {"name": "WebApp Principal", "count": 7},
+            {"name": "API Externa", "count": 4},
+            {"name": "Infraestructura Dev", "count": 2},
+        ]
+
+        return render(
+            request,
+            "core/client_dashboard.html",
+            {
+                "sidebar_template": sidebar,
+                "role": role,
+                "severity_data": severity_data,
+                "labels": labels,
+                "values": values,
+                "top_assets": top_assets,
+            },
+        )
+
+    return render(
+        request,
+        "core/dashboard.html",
+        {
+            "sidebar_template": sidebar,
+            "role": role,
+        },
+    )
 
 
 # Paso 5: Logout
@@ -130,3 +173,12 @@ def register_view(request):
         return redirect("login")  # Opcional: redirige a login tras registro exitoso
 
     return render(request, "core/user_register.html", {"form": form})
+
+
+@csrf_exempt
+def tinymce_image_upload(request):
+    if request.method == "POST":
+        image = request.FILES.get("file")
+        path = default_storage.save(f"uploads/{image.name}", image)
+        return JsonResponse({"location": f"/media/{path}"})
+    return JsonResponse({"error": "Invalid request"}, status=400)

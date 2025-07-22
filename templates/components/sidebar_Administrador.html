@@ -1,0 +1,51 @@
+<nav class="bg-dark text-white vh-100 p-3" style="width: 240px;">
+  <h4 class="mb-4">vulnTracker</h4>
+  <small class="text-muted">Administrador</small>
+
+  <ul class="nav flex-column">
+    <li class="nav-item mb-2">
+      <a href="{% url 'dashboard' %}" class="nav-link text-white">🏠 Inicio</a>
+    </li>
+
+    <!-- 📁 Proyectos -->
+    <li class="nav-item">
+      <button class="btn btn-sm text-white w-100 text-start" data-bs-toggle="collapse" data-bs-target="#proyectosSubmenu">
+        📁 Proyectos ▾
+      </button>
+      <div class="collapse ps-3" id="proyectosSubmenu">
+        <a href="{% url 'projects_overview' %}" class="nav-link text-white">📁 Proyectos</a>
+        <a href="#" class="nav-link text-white">📆 Follow Up</a>
+        <a href="#" class="nav-link text-white">🗂️ Reportes</a>
+      </div>
+    </li>
+
+    <!-- 🏢 Clientes -->
+    <li class="nav-item mt-3">
+      <button class="btn btn-sm text-white w-100 text-start" data-bs-toggle="collapse" data-bs-target="#clientesSubmenu">
+        🏢 Clientes ▾
+      </button>
+      <div class="collapse ps-3" id="clientesSubmenu">
+        <a href="{% url 'clients_list' %}" class="nav-link text-white">🏛️ Empresas</a>
+        <a href="{% url 'contacts_list' %}" class="nav-link text-white">👥 Puntos de contacto</a>
+      </div>
+    </li>
+
+    <!-- 🛡️ Vulnerabilidades -->
+    <li class="nav-item mt-3 mb-2">
+      <a href="{% url 'vulnerability_list' %}" class="nav-link text-white">🛡️ Vulnerabilidades</a>
+    </li>
+
+    <!-- ⚙️ Panel Django -->
+    <li class="nav-item mb-3">
+      <a href="/admin/" class="nav-link text-white">⚙️ Panel Django</a>
+    </li>
+
+    <!-- 🔒 Logout -->
+    <li class="nav-item mt-4">
+      <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-outline-light w-100">Cerrar sesión</button>
+      </form>
+    </li>
+  </ul>
+</nav>

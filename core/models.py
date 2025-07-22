@@ -6,6 +6,7 @@ from django.contrib.auth.models import (
 from django.db import models
 from django_otp.models import Device
 from django_otp.plugins.otp_totp.models import TOTPDevice
+from customers.models import Client
 
 
 def generate_totp_secret(user):
@@ -64,6 +65,14 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     job_title = models.CharField(max_length=100, blank=True, null=True)
     role = models.ForeignKey(Role, on_delete=models.SET_NULL, null=True)
+    client = models.ForeignKey(
+        Client,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="users",
+        help_text="Empresa asociada para usuarios con rol cliente",
+    )
     totp_secret = models.CharField(max_length=32, blank=True, null=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)

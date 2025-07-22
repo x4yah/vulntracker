@@ -1,0 +1,33 @@
+{% extends "../base.html" %}
+{% block title %}{{ contact.first_name }} {{ contact.last_name }} | vulnTracker{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h2 class="mb-4">👤 Detalles del contacto</h2>
+
+  <div class="card mb-4">
+    <div class="card-body">
+      <h4 class="card-title">{{ contact.first_name }} {{ contact.last_name }}</h4>
+      <p class="mb-2 text-muted">{{ contact.role }}</p>
+
+      <p>
+        <strong>Email:</strong>
+        <a href="mailto:{{ contact.email }}">{{ contact.email }}</a><br>
+        {% if contact.phone %}
+          <strong>Teléfono:</strong> {{ contact.phone }}<br>
+        {% endif %}
+        <strong>Empresa:</strong>
+        <a href="{% url 'clients_details' contact.client.pk %}">{{ contact.client.name }}</a>
+      </p>
+
+      <p class="text-muted small">Registrado el {{ contact.created_at|date:"d M Y" }}</p>
+    </div>
+  </div>
+
+  <div class="d-flex gap-3">
+    <a href="{% url 'contacts_edit' contact.pk %}" class="btn btn-outline-primary">✏️ Editar contacto</a>
+    <a href="{% url 'contacts_list' %}" class="btn btn-outline-secondary">← Volver al listado</a>
+    <a href="{% url 'clients_details' contact.client.pk %}" class="btn btn-outline-dark">🏢 Ver empresa</a>
+  </div>
+</div>
+{% endblock %}

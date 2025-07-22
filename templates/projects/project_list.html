@@ -1,0 +1,70 @@
+{% extends "../base.html" %}
+{% block title %}Proyectos técnicos | vulnTracker{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">📦 Proyectos en curso</h2>
+    <a href="{% url 'projects_new'%}" class="btn btn-success">➕ Nuevo proyecto</a>
+  </div>
+
+  {% if projects %}
+    <div class="table-responsive">
+      <table class="table table-hover align-middle" id="projectTable">
+        <thead class="table-dark">
+          <tr>
+            <th>Alias técnico</th>
+            <th>Nombre</th>
+            <th>Cliente</th>
+            <th>Responsable</th>
+            <th>Inicio</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for project in projects %}
+            <tr>
+              <td>
+                <a href="{% url 'projects_edit' project.pk %}" class="text-decoration-none fw-bold">
+                  {{ project.code_name }}
+                </a>
+              </td>
+              <td>{{ project.name }}</td>
+              <td>
+                <a href="{% url 'clients_details' project.client.pk %}">
+                  {{ project.client.short_name }}
+                </a>
+              </td>
+              <td>
+                {% if project.leader %}
+                {{ project.leader.get_full_name|default:project.leader.username }}
+                {% else %}
+                <span class="text-muted">No asignado</span>
+                {% endif %}
+              </td>
+              <td>{{ project.start_date }}</td>
+              <td>
+                <span class="badge text-bg-{% if project.status == 'cerrado' %}secondary{% elif project.status == 'en_progreso' %}warning{% else %}primary{% endif %}">
+                  {{ project.get_status_display }}
+                </span>
+              </td>
+              <td>
+                <div class="btn-group btn-group-sm">
+                  <a href="{% url 'projects_edit' project.pk %}" class="btn btn-outline-primary">✏️</a>
+                  <a href="{% url 'projects_delete' project.pk %}" class="btn btn-outline-danger" onclick="return confirm('¿Eliminar este proyecto?');">🗑️</a>
+                </div>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="text-muted">No hay proyectos registrados aún.</p>
+  {% endif %}
+  
+</div>
+{% endblock %}
+
+

@@ -48,13 +48,15 @@ INSTALLED_APPS = [
     "django_otp",
     "django_otp.plugins.otp_static",
     "django_otp.plugins.otp_totp",
-    "two_factor",
+    "tinymce",
+    "django_select2",
     # 🧠 Tus apps
     "core",
-    "clients",
     "projects",
     "reports",
     "tracking",
+    "vulnerabilities",
+    "customers",
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
@@ -154,7 +156,17 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+TINYMCE_DEFAULT_CONFIG = {
+    "plugins": "image media link code",
+    "toolbar": "undo redo | bold italic | alignleft aligncenter alignright | image media link",
+    "automatic_uploads": True,
+    "images_upload_url": "/tinymce/upload/",
+    "file_picker_types": "image",
+}
