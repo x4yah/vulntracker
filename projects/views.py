@@ -61,6 +61,7 @@ def project_create_view(request):
         {"form": form, "sidebar_template": sidebar},
     )
 
+
 @login_required
 def project_edit_view(request, pk):
     role = request.user.role
@@ -73,7 +74,12 @@ def project_edit_view(request, pk):
             return redirect("projects_detail", pk=project.pk)
     else:
         form = ProjectForm(instance=project)
-    return render(request, "projects/project_edit.html", {"form": form, "project": project, "sidebar_template": sidebar})
+    return render(
+        request,
+        "projects/project_edit.html",
+        {"form": form, "project": project, "sidebar_template": sidebar},
+    )
+
 
 @login_required
 def project_delete_view(request, pk):
@@ -86,7 +92,8 @@ def project_delete_view(request, pk):
         messages.success(request, f"Proyecto '{project.name}' eliminado correctamente.")
         return redirect("projects_overview")
 
-    return render(request, "projects/project_confirm_delete.html", {
-        "project": project,
-        "sidebar_template": sidebar
-    })
+    return render(
+        request,
+        "projects/project_confirm_delete.html",
+        {"project": project, "sidebar_template": sidebar},
+    )

@@ -19,14 +19,12 @@ class Project(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
         null=True,
-        related_name="projects_led"
+        related_name="projects_led",
     )
 
     # 👥 Colaboradores adicionales
     specialist = models.ManyToManyField(
-        settings.AUTH_USER_MODEL,
-        blank=True,
-        related_name="projects_collaborated"
+        settings.AUTH_USER_MODEL, blank=True, related_name="projects_collaborated"
     )
     start_date = models.DateField()
     end_date = models.DateField(null=True, blank=True)

@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('projects', '0004_auto_20250720_2319'),
+        ("projects", "0004_auto_20250720_2319"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='project',
-            name='scope',
-            field=models.TextField(blank=True, verbose_name='Alcance del proyecto'),
+            model_name="project",
+            name="scope",
+            field=models.TextField(blank=True, verbose_name="Alcance del proyecto"),
         ),
     ]

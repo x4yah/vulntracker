@@ -4,10 +4,8 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('projects', '0003_project_description'),
+        ("projects", "0003_project_description"),
     ]
 
-    operations = [
-    ]
+    operations = []

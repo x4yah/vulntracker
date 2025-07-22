@@ -8,7 +8,7 @@ urlpatterns = [
     # path("reports/", views.project_reports_view, name="projects_reports"),
     path("new/", views.project_create_view, name="projects_new"),
     # projects details
-    #path("<int:pk>/", views.projects_detail_view, name="projects_detail"),
+    # path("<int:pk>/", views.projects_detail_view, name="projects_detail"),
     path("<int:pk>/edit/", views.project_edit_view, name="projects_edit"),
     path("<int:pk>/delete/", views.project_delete_view, name="projects_delete"),
     # path("<int:pk>/followups/", views.project_followups_view, name="projects_followups"),

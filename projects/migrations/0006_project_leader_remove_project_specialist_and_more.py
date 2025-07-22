@@ -6,30 +6,48 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('projects', '0005_project_scope'),
+        ("projects", "0005_project_scope"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='project',
-            name='leader',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='projects_led', to=settings.AUTH_USER_MODEL),
+            model_name="project",
+            name="leader",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name="projects_led",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.RemoveField(
-            model_name='project',
-            name='specialist',
+            model_name="project",
+            name="specialist",
         ),
         migrations.AlterField(
-            model_name='project',
-            name='status',
-            field=models.CharField(choices=[('por_iniciar', 'Por iniciar'), ('activo', 'Activo'), ('on_hold', 'En pausa'), ('en_progreso', 'En Progreso'), ('retrasado', 'Retrasado'), ('cerrado', 'Cerrado')], max_length=50),
+            model_name="project",
+            name="status",
+            field=models.CharField(
+                choices=[
+                    ("por_iniciar", "Por iniciar"),
+                    ("activo", "Activo"),
+                    ("on_hold", "En pausa"),
+                    ("en_progreso", "En Progreso"),
+                    ("retrasado", "Retrasado"),
+                    ("cerrado", "Cerrado"),
+                ],
+                max_length=50,
+            ),
         ),
         migrations.AddField(
-            model_name='project',
-            name='specialist',
-            field=models.ManyToManyField(blank=True, related_name='projects_collaborated', to=settings.AUTH_USER_MODEL),
+            model_name="project",
+            name="specialist",
+            field=models.ManyToManyField(
+                blank=True,
+                related_name="projects_collaborated",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
     ]
